@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Document</title><link rel=stylesheet href=../css/index-ff5fc00127.css><link rel=stylesheet href=../css/public-7ec144a19c.css></head><body><ul><li class=itemli><a id=itemli>首页</a></li></ul><div class=title-wrapperseconednav><div class=sub-panel-wrapper-show id=sub><div class=nav-sub-container><ul class=category-wrapper><li class=item><div class=container><div class=title>手机</div><ul class=category-container style="width: 202px;"><li class=category-item><a data-url="https://www.smartisan.com/category/210?type=product" class=link><img src="https://resource.smartisan.com/resource/a4c73e549097c7f5cf2c5e0d87e56d13.png?x-oss-process=image/resize,w_60/format,webp" class=picture><span class=sub-title>手机</span></a></li></ul></div></li></ul></div></div></div></body><script src=https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js></script><script src=../js/utils-4a48789407.js></script><script>
+    var str2 = $("#itemli").html();
+    // console.log(str2);
+    var html1 = "";
+    var html = "";
+    var html2 = "";
+    let timeout;
+    // 鼠标移入事件
+    // 进行防抖处理
+    // 数据的渲染
+    $(".itemli").mousemove(function (e) {
+      var target = e.srcElement || e.target;
+      clearTimeout(timeout);
+      //先让页面变干净更好的渲染
+      $(".category-wrapper").children().remove();
+      timeout = setTimeout(() => {
+        $(".category-wrapper").html(html);
+        // 对元素进行添加和移除class
+        $("#sub").removeClass("sub-panel-wrapper-hide");
+        $("#sub").addClass("sub-panel-wrapper-show");
+      }, 200);
+    });
+
+    $(".itemli").mouseleave(function (e) {
+      clearTimeout(timeout);
+      $("#sub").removeClass("sub-panel-wrapper-show");
+      $("#sub").addClass("sub-panel-wrapper-hide");
+
+      // timeout = null;
+      // console.log(timeout);
+    });
+
+    function load() {
+      var options = {
+        // http://303z9z3029.qicp.vip/
+        url: "http://localhost/secon_nav",
+        success: render,
+        dataType: "json",
+      };
+      ajax(options);
+    }
+
+    function render(res) {
+      res.forEach(function (item, index) {
+        // console.log(item.list.length);
+        if (item.name === str2 && item.list.length === 1) {
+          console.log(item.list.length);
+          // console.log(item.length);
+          item.list.forEach(function (item, index) {
+            item.sub.forEach(function (item) {
+              // console.log(item)
+              html2 += `<li class="category-item">
+                           <a
+                              data-url="https://www.smartisan.com/category/297?type=shop"
+                              class="link"
+                            >
+                           <img
+                             src="${item.image}"
+                             class="picture"
+                           />
+                           <span class="sub-title">${item.name}</span></a>
+                         </li>
+                      `;
+            });
+            // console.log(item.length);
+            html1 += `
+             
+               <li class="item">
+                 <div class="container">
+                   <div class="title">${item.title}</div>
+                    <ul class="category-container" style="width: 202px;">
+                    ${html2}
+                     </ul>
+                    </div>
+                 </li>
+                 
+              `;
+            html += html1;
+            html1 = "";
+            html2 = "";
+          });
+        }
+        if (item.name === str2 && item.list.length > 1) {
+          let lisize = item.list.length;
+          item.list.forEach(function (item) {
+            item.sub.forEach(function (item) {
+              html2 += `
+              <li  class="category-item">
+                <a
+                  data-url=""
+                  class="link"
+                  ><img src="${item.image}"
+                    class="picture"
+                  /><span  class="sub-title"
+                    >${item.name}</span
+                  ></a>
+              </li> `;
+            });
+            // console.log(item);
+            html1 += `
+            <li class="item">
+              <div class="container">
+                <div class="title">
+                  ${item.title}
+                </div>
+                <ul class="category-container" style="width: 202px;">
+                ${html2}
+                </ul>
+              </div>
+            </li>`;
+            html += html1;
+            html1 = "";
+            html2 = "";
+          });
+        }
+      });
+    }
+    load();
+  </script></html>
